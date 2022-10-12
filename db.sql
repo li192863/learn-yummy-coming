@@ -1,7 +1,7 @@
 /*
  Navicat Premium Data Transfer
 
- Source Server         : Mysql
+ Source Server         : localhost
  Source Server Type    : MySQL
  Source Server Version : 80029
  Source Host           : localhost:3306
@@ -11,7 +11,7 @@
  Target Server Version : 80029
  File Encoding         : 65001
 
- Date: 03/09/2022 16:53:01
+ Date: 12/10/2022 21:11:09
 */
 
 SET NAMES utf8mb4;
@@ -42,15 +42,15 @@ CREATE TABLE `address_book`  (
   `update_user` bigint NOT NULL COMMENT '修改人',
   `is_deleted` int NOT NULL DEFAULT 0 COMMENT '是否删除',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_bin COMMENT = '地址管理' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_bin COMMENT = '地址管理' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of address_book
 -- ----------------------------
 INSERT INTO `address_book` VALUES (1417414526093082626, 1417012167126876162, '小明', 1, '13812345678', NULL, NULL, NULL, NULL, NULL, NULL, '昌平区金燕龙办公楼', '公司', 1, '2021-07-20 17:22:12', '2021-07-20 17:26:33', 1417012167126876162, 1417012167126876162, 0);
 INSERT INTO `address_book` VALUES (1417414926166769666, 1417012167126876162, '小李', 1, '13512345678', NULL, NULL, NULL, NULL, NULL, NULL, '测试', '家', 0, '2021-07-20 17:23:47', '2021-07-20 17:23:47', 1417012167126876162, 1417012167126876162, 0);
-INSERT INTO `address_book` VALUES (1565648966945247233, 1565406134805721089, '李晨', 1, '13565545856', NULL, NULL, NULL, NULL, NULL, NULL, '西安', '家', 0, '2022-09-02 18:32:57', '2022-09-02 18:34:11', 1565406134805721089, 1565406134805721089, 0);
-INSERT INTO `address_book` VALUES (1565649424178909186, 1565406134805721089, '李晨', 1, '15685945256', NULL, NULL, NULL, NULL, NULL, NULL, '北京', '公司', 1, '2022-09-02 18:34:46', '2022-09-02 18:35:08', 1565406134805721089, 1565406134805721089, 0);
+INSERT INTO `address_book` VALUES (1565648966945247233, 1565406134805721089, '李晨', 1, '13565545856', NULL, NULL, NULL, NULL, NULL, NULL, '西安', '家', 0, '2022-09-02 18:32:57', '2022-10-12 21:05:03', 1565406134805721089, 1565406134805721089, 0);
+INSERT INTO `address_book` VALUES (1565649424178909186, 1565406134805721089, '李晨', 1, '15685945256', NULL, NULL, NULL, NULL, NULL, NULL, '北京', '公司', 1, '2022-09-02 18:34:46', '2022-10-12 21:05:07', 1565406134805721089, 1565406134805721089, 0);
 
 -- ----------------------------
 -- Table structure for category
@@ -67,7 +67,7 @@ CREATE TABLE `category`  (
   `update_user` bigint NOT NULL COMMENT '修改人',
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `idx_category_name`(`name` ASC) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_bin COMMENT = '菜品及套餐分类' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_bin COMMENT = '菜品及套餐分类' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of category
@@ -102,7 +102,7 @@ CREATE TABLE `dish`  (
   `is_deleted` int NOT NULL DEFAULT 0 COMMENT '是否删除',
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `idx_dish_name`(`name` ASC) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_bin COMMENT = '菜品管理' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_bin COMMENT = '菜品管理' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of dish
@@ -146,7 +146,7 @@ CREATE TABLE `dish_flavor`  (
   `update_user` bigint NOT NULL COMMENT '修改人',
   `is_deleted` int NOT NULL DEFAULT 0 COMMENT '是否删除',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_bin COMMENT = '菜品口味关系表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_bin COMMENT = '菜品口味关系表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of dish_flavor
@@ -234,7 +234,7 @@ CREATE TABLE `employee`  (
   `update_user` bigint NOT NULL COMMENT '修改人',
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `idx_username`(`username` ASC) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_bin COMMENT = '员工信息' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_bin COMMENT = '员工信息' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of employee
@@ -260,11 +260,16 @@ CREATE TABLE `order_detail`  (
   `number` int NOT NULL DEFAULT 1 COMMENT '数量',
   `amount` decimal(10, 2) NOT NULL COMMENT '金额',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_bin COMMENT = '订单明细表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_bin COMMENT = '订单明细表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of order_detail
 -- ----------------------------
+INSERT INTO `order_detail` VALUES (1580177451856736258, '情侣餐', '70a61721-976b-4f53-8524-3df21d323682.jpg', 1580177451856736257, NULL, 1565286674430087170, NULL, 2, 2.00);
+INSERT INTO `order_detail` VALUES (1580179453244428289, '情侣餐', '70a61721-976b-4f53-8524-3df21d323682.jpg', 1580179120699035650, NULL, 1565286674430087170, NULL, 2, 2.00);
+INSERT INTO `order_detail` VALUES (1580179656341016578, '米饭', 'ee04a05a-1230-46b6-8ad5-1a95b140fff3.png', 1580179639245033473, 1413385247889891330, NULL, NULL, 2, 2.00);
+INSERT INTO `order_detail` VALUES (1580182792996761602, '情侣餐', '70a61721-976b-4f53-8524-3df21d323682.jpg', 1580182792996761601, NULL, 1565286674430087170, NULL, 1, 2.00);
+INSERT INTO `order_detail` VALUES (1580182793068064769, '米饭', 'ee04a05a-1230-46b6-8ad5-1a95b140fff3.png', 1580182792996761601, 1413385247889891330, NULL, NULL, 1, 2.00);
 
 -- ----------------------------
 -- Table structure for orders
@@ -286,11 +291,15 @@ CREATE TABLE `orders`  (
   `user_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
   `consignee` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_bin COMMENT = '订单表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_bin COMMENT = '订单表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of orders
 -- ----------------------------
+INSERT INTO `orders` VALUES (1580177451856736257, '1580177451856736257', 4, 1565406134805721089, 1565649424178909186, '2022-10-12 20:43:57', '2022-10-12 20:43:57', 1, 4.00, '', '15685945256', '北京', '', '李晨');
+INSERT INTO `orders` VALUES (1580179120699035650, '1580179120699035650', 3, 1565406134805721089, 1565649424178909186, '2022-10-12 20:50:35', '2022-10-12 20:50:35', 1, 4.00, '', '15685945256', '北京', '', '李晨');
+INSERT INTO `orders` VALUES (1580179639245033473, '1580179639245033473', 2, 1565406134805721089, 1565648966945247233, '2022-10-12 20:52:39', '2022-10-12 20:52:39', 1, 4.00, '', '13565545856', '西安', '', '李晨');
+INSERT INTO `orders` VALUES (1580182792996761601, '1580182792996761601', 2, 1565406134805721089, 1565649424178909186, '2022-10-12 21:05:11', '2022-10-12 21:05:11', 1, 4.00, '', '15685945256', '北京', '', '李晨');
 
 -- ----------------------------
 -- Table structure for setmeal
@@ -312,7 +321,7 @@ CREATE TABLE `setmeal`  (
   `is_deleted` int NOT NULL DEFAULT 0 COMMENT '是否删除',
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `idx_setmeal_name`(`name` ASC) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_bin COMMENT = '套餐' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_bin COMMENT = '套餐' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of setmeal
@@ -339,7 +348,7 @@ CREATE TABLE `setmeal_dish`  (
   `update_user` bigint NOT NULL COMMENT '修改人',
   `is_deleted` int NOT NULL DEFAULT 0 COMMENT '是否删除',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_bin COMMENT = '套餐菜品关系' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_bin COMMENT = '套餐菜品关系' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of setmeal_dish
@@ -374,11 +383,13 @@ CREATE TABLE `shopping_cart`  (
   `amount` decimal(10, 2) NOT NULL COMMENT '金额',
   `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_bin COMMENT = '购物车' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_bin COMMENT = '购物车' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of shopping_cart
 -- ----------------------------
+INSERT INTO `shopping_cart` VALUES (1580181322154975234, '米饭', 'ee04a05a-1230-46b6-8ad5-1a95b140fff3.png', 1, 1413385247889891330, NULL, NULL, 1, 2.00, '2022-10-12 20:59:20');
+INSERT INTO `shopping_cart` VALUES (1580181336923119618, '鱼香炒鸡蛋', '0f252364-a561-4e8d-8065-9a6797a6b1d3.jpg', 1, 1397854865672679425, NULL, '重辣', 1, 20.00, '2022-10-12 20:59:24');
 
 -- ----------------------------
 -- Table structure for user
@@ -393,7 +404,7 @@ CREATE TABLE `user`  (
   `avatar` varchar(500) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL COMMENT '头像',
   `status` int NULL DEFAULT 0 COMMENT '状态 0:禁用，1:正常',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_bin COMMENT = '用户信息' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_bin COMMENT = '用户信息' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of user
