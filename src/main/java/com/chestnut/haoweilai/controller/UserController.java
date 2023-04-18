@@ -8,6 +8,7 @@ import com.chestnut.haoweilai.util.ValidateCodeUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 @Slf4j
 @RestController
@@ -22,6 +24,8 @@ import java.util.Map;
 public class UserController {
     @Autowired
     private UserService userService;
+    @Autowired
+    private RedisTemplate redisTemplate;
 
     /**
      * 发送手机短信验证码
@@ -41,8 +45,8 @@ public class UserController {
         log.info("code = {}", code);
         // 发送短信 （若要发送短信则取消注释下行代码，并更改com.chestnut.reggie.util.SMSUtils.sendMessage方法）
 //        SMSUtils.sendMessage("阿里云短信测试", "SMS_154950909", phone, code);
-        // 生成验证码保存至session
-        request.getSession().setAttribute(phone, code);
+        // 生成验证码保存至redis中，设置有效期5min
+        redisTemplate.opsForValue().set(phone, code, 5, TimeUnit.MINUTES);
         return R.success("短信发送成功");
     }
 
@@ -58,10 +62,10 @@ public class UserController {
         String phone = map.get("phone").toString();
         // 获取验证码
         String code = map.get("code").toString();
-        // 获取存储在session中的验证码
-        Object codeInSession = request.getSession().getAttribute(phone);
+        // 获取存储在redis中的验证码
+        Object codeInRedis = redisTemplate.opsForValue().get(phone);
         // 比对验证码
-        if (codeInSession != null && codeInSession.equals(code)) {
+        if (codeInRedis != null && codeInRedis.equals(code)) {
             LambdaQueryWrapper<User> lqw = new LambdaQueryWrapper<>();
             lqw.eq(User::getPhone, phone);
             User user = userService.getOne(lqw);
@@ -72,7 +76,8 @@ public class UserController {
                 user.setStatus(1);
                 userService.save(user);
             }
-            // 登录成功，id存入session中
+            // 登录成功，id存入redis中
+            redisTemplate.delete(phone);
             request.getSession().setAttribute("user", user.getId());
             return R.success(user);
         }
