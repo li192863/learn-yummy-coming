@@ -14,6 +14,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
 
@@ -75,15 +77,8 @@ public class DishController {
      * @return
      */
     @GetMapping("/list")
+    @Cacheable(value = "dishCache", key = "#dish.categoryId")
     public R<List<DishDto>> list(Dish dish) {
-        // 尝试从redis中获取缓存数据
-        List<DishDto> dishDtoList = null;
-        String key = "dish_" + dish.getCategoryId();
-        dishDtoList  = (List<DishDto>) redisTemplate.opsForValue().get(key);
-        if (dishDtoList != null) {
-            return R.success(dishDtoList);
-        }
-
         // 构造条件构造器
         LambdaQueryWrapper<Dish> dishLqw = new LambdaQueryWrapper<>();
         dishLqw.eq(dish.getCategoryId() != null, Dish::getCategoryId, dish.getCategoryId());
@@ -93,7 +88,7 @@ public class DishController {
         List<Dish> list = dishService.list(dishLqw);
 
         // 查询口味
-        dishDtoList = list.stream().map((item) -> {
+        List<DishDto> dishDtoList = list.stream().map((item) -> {
             DishDto dishDto = new DishDto();
             BeanUtils.copyProperties(item, dishDto);  // 复制dish基本信息
             // 设置种类
@@ -107,9 +102,6 @@ public class DishController {
             dishDto.setFlavors(dishFlavors);
             return dishDto;
         }).collect(Collectors.toList());
-
-        // 保存菜品数据至redis
-        redisTemplate.opsForValue().set(key, dishDtoList, 60, TimeUnit.MINUTES);
 
         return R.success(dishDtoList);
     }
@@ -131,11 +123,9 @@ public class DishController {
      * @return
      */
     @PostMapping
+    @CacheEvict(value = "dishCache", allEntries = true)
     public R<String> save(@RequestBody DishDto dishDto) {
         dishService.saveWithFlavor(dishDto);
-        // 清理缓存
-        String key = "dish_" + dishDto.getCategoryId();
-        redisTemplate.delete(key);
         return R.success("添加菜品成功");
     }
 
@@ -145,15 +135,9 @@ public class DishController {
      * @return
      */
     @PostMapping("/status/{status}")
+    @CacheEvict(value = "dishCache", allEntries = true)
     public R<String> updateStatus(@RequestParam List<Long> ids, @PathVariable int status) {
         dishService.updateStatus(ids, status);
-        // 清理缓存
-        for (long id: ids) {
-            Dish dish = dishService.getById(id);
-            String key = "dish_" + dish.getCategoryId();
-            redisTemplate.delete(key);
-        }
-
         return R.success("更新菜品成功");
     }
 
@@ -163,11 +147,9 @@ public class DishController {
      * @return
      */
     @PutMapping
+    @CacheEvict(value = "dishCache", allEntries = true)
     public R<String> update(@RequestBody DishDto dishDto) {
         dishService.updateWithFlavor(dishDto);
-        // 清理缓存
-        String key = "dish_" + dishDto.getCategoryId();
-        redisTemplate.delete(key);
         return R.success("更新菜品成功");
     }
 
@@ -177,6 +159,7 @@ public class DishController {
      * @return
      */
     @DeleteMapping
+    @CacheEvict(value = "dishCache", allEntries = true)
     public R<String> delete(@RequestParam List<Long> ids) {
         dishService.removeWithFlavor(ids);
         return R.success("删除菜品成功");
