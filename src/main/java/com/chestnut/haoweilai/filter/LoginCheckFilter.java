@@ -13,6 +13,7 @@ import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Objects;
 
 /**
  * 检查用户是否完成登录
@@ -48,7 +49,8 @@ public class LoginCheckFilter implements Filter {
         }
         // 若后台已登录则直接放行
         if (redisTemplate.opsForValue().get("employee") != null) {
-            Long employeeId = (Long) redisTemplate.opsForValue().get("employee");  // 当前用户id
+            // 当前用户id
+            Long employeeId = ((Integer) Objects.requireNonNull(redisTemplate.opsForValue().get("employee"))).longValue();
             BaseContext.setCurrentId(employeeId);
 
             log.info("请求{}无需拦截，员工（id为{}）已登录", requestURI, employeeId);
@@ -57,7 +59,8 @@ public class LoginCheckFilter implements Filter {
         }
         // 若用户已登录则直接放行
         if (redisTemplate.opsForValue().get("user") != null) {
-            Long userId = (Long) redisTemplate.opsForValue().get("user");  // 当前用户id
+            // 当前用户id
+            Long userId = ((Integer) Objects.requireNonNull(redisTemplate.opsForValue().get("user"))).longValue();
             BaseContext.setCurrentId(userId);
 
             log.info("请求{}无需拦截，用户（id为{}）已登录", requestURI, userId);
