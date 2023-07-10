@@ -33,13 +33,20 @@ public class LoginCheckFilter implements Filter {
         String requestURI = req.getRequestURI();
         // 判断本次请求是否需要处理
         String[] urls = new String[] {
-                "/employee/login",  // 后台员工登录
-                "/employee/logout",  // 后台员工退出
-                "/backend/**",  // 后台资源
-                "/front/**",  // 前台资源
-                "/common/**",  // 公共资源（上传/下载图片）
-                "/user/sendMsg",  // 前台发送短信
-                "/user/login"  // 前台登录
+                // 后台员工登录
+                "/employee/login",
+                // 后台员工退出
+                "/employee/logout",
+                // 后台资源
+                "/backend/**",
+                // 前台资源
+                "/front/**",
+                // 公共资源（上传/下载图片）
+                "/common/**",
+                // 前台发送短信
+                "/user/sendMsg",
+                // 前台登录
+                "/user/login"
         };
         // 若资源无需拦截则直接放行
         if (isNotBlocked(urls, requestURI)) {
