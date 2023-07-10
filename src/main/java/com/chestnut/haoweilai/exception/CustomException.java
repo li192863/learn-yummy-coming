@@ -1,4 +1,4 @@
-package com.chestnut.haoweilai.common;
+package com.chestnut.haoweilai.exception;
 
 /**
  * 业务异常类

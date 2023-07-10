@@ -4,6 +4,8 @@ import com.alibaba.fastjson.JSON;
 import com.chestnut.haoweilai.common.BaseContext;
 import com.chestnut.haoweilai.common.R;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.util.AntPathMatcher;
 
 import javax.servlet.*;
@@ -18,6 +20,8 @@ import java.io.IOException;
 @Slf4j
 @WebFilter(filterName = "loginCheckFilter", urlPatterns = "/*")
 public class LoginCheckFilter implements Filter {
+    @Autowired
+    private RedisTemplate<Object, Object> redisTemplate;
     public static final AntPathMatcher PATH_MATCHER = new AntPathMatcher();
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
@@ -43,8 +47,8 @@ public class LoginCheckFilter implements Filter {
             return;
         }
         // 若后台已登录则直接放行
-        if (req.getSession().getAttribute("employee") != null) {
-            Long employeeId = (Long) req.getSession().getAttribute("employee");  // 当前用户id
+        if (redisTemplate.opsForValue().get("employee") != null) {
+            Long employeeId = (Long) redisTemplate.opsForValue().get("employee");  // 当前用户id
             BaseContext.setCurrentId(employeeId);
 
             log.info("请求{}无需拦截，员工（id为{}）已登录", requestURI, employeeId);
@@ -52,8 +56,8 @@ public class LoginCheckFilter implements Filter {
             return;
         }
         // 若用户已登录则直接放行
-        if (req.getSession().getAttribute("user") != null) {
-            Long userId = (Long) req.getSession().getAttribute("user");  // 当前用户id
+        if (redisTemplate.opsForValue().get("user") != null) {
+            Long userId = (Long) redisTemplate.opsForValue().get("user");  // 当前用户id
             BaseContext.setCurrentId(userId);
 
             log.info("请求{}无需拦截，用户（id为{}）已登录", requestURI, userId);

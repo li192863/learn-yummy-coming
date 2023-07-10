@@ -1,5 +1,7 @@
-package com.chestnut.haoweilai.common;
+package com.chestnut.haoweilai.exception;
 
+import com.chestnut.haoweilai.common.R;
+import com.chestnut.haoweilai.exception.CustomException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ExceptionHandler;

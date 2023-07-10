@@ -2,7 +2,7 @@ package com.chestnut.haoweilai.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.chestnut.haoweilai.common.CustomException;
+import com.chestnut.haoweilai.exception.CustomException;
 import com.chestnut.haoweilai.dto.DishDto;
 import com.chestnut.haoweilai.entity.Dish;
 import com.chestnut.haoweilai.entity.DishFlavor;

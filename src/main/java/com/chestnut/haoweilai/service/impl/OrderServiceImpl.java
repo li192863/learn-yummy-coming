@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.IdWorker;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.chestnut.haoweilai.common.BaseContext;
-import com.chestnut.haoweilai.common.CustomException;
+import com.chestnut.haoweilai.exception.CustomException;
 import com.chestnut.haoweilai.entity.*;
 import com.chestnut.haoweilai.mapper.OrderMapper;
 import com.chestnut.haoweilai.service.*;
