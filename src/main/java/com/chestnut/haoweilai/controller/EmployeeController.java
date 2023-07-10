@@ -8,10 +8,12 @@ import com.chestnut.haoweilai.service.EmployeeService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.util.DigestUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.concurrent.TimeUnit;
 
 @Slf4j
 @RestController
@@ -19,6 +21,9 @@ import javax.servlet.http.HttpServletRequest;
 public class EmployeeController {
     @Autowired
     private EmployeeService employeeService;
+
+    @Autowired
+    private RedisTemplate<Object, Object> redisTemplate;
 
     /**
      * 员工登录
@@ -49,7 +54,8 @@ public class EmployeeController {
             return R.error("用户名已禁用");
         }
         // 登录成功，id存入session中
-        request.getSession().setAttribute("employee", emp.getId());
+//        request.getSession().setAttribute("employee", emp.getId());
+        redisTemplate.opsForValue().set("employee", emp.getId(), 1, TimeUnit.DAYS);
 
         return R.success(emp);
     }
@@ -62,7 +68,8 @@ public class EmployeeController {
     @PostMapping("/logout")
     public R<String> logout(HttpServletRequest request) {
         // 清除session中的id
-        request.getSession().removeAttribute("employee");
+//        request.getSession().removeAttribute("employee");
+        redisTemplate.delete("employee");
         return R.success("员工退出成功");
     }
 

@@ -25,7 +25,7 @@ public class UserController {
     @Autowired
     private UserService userService;
     @Autowired
-    private RedisTemplate redisTemplate;
+    private RedisTemplate<Object, Object> redisTemplate;
 
     /**
      * 发送手机短信验证码
@@ -78,7 +78,8 @@ public class UserController {
             }
             // 登录成功，id存入redis中
             redisTemplate.delete(phone);
-            request.getSession().setAttribute("user", user.getId());
+            redisTemplate.opsForValue().set("user", user.getId(), 1, TimeUnit.DAYS);
+//            request.getSession().setAttribute("user", user.getId());
             return R.success(user);
         }
         // 登录失败
