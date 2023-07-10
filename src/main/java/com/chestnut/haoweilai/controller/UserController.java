@@ -94,7 +94,8 @@ public class UserController {
     @PostMapping("/logout")
     public R<String> logout(HttpServletRequest request) {
         // 清除session中的id
-        request.getSession().removeAttribute("user");
+        redisTemplate.delete("user");
+//        request.getSession().removeAttribute("user");
         return R.success("用户退出成功");
     }
 }
