@@ -50,7 +50,7 @@ public class LoginCheckFilter implements Filter {
         // 若后台已登录则直接放行
         if (redisTemplate.opsForValue().get("employee") != null) {
             // 当前用户id
-            Long employeeId = ((Integer) Objects.requireNonNull(redisTemplate.opsForValue().get("employee"))).longValue();
+            Long employeeId = (Long) redisTemplate.opsForValue().get("employee");
             BaseContext.setCurrentId(employeeId);
 
             log.info("请求{}无需拦截，员工（id为{}）已登录", requestURI, employeeId);
@@ -60,7 +60,7 @@ public class LoginCheckFilter implements Filter {
         // 若用户已登录则直接放行
         if (redisTemplate.opsForValue().get("user") != null) {
             // 当前用户id
-            Long userId = ((Integer) Objects.requireNonNull(redisTemplate.opsForValue().get("user"))).longValue();
+            Long userId = (Long) redisTemplate.opsForValue().get("user");
             BaseContext.setCurrentId(userId);
 
             log.info("请求{}无需拦截，用户（id为{}）已登录", requestURI, userId);
